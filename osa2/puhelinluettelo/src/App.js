@@ -1,16 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+//import axios from 'axios'
+import personService from './services/persons'
 
-const Person = ({person}) => {
+const DelButton = ({person, setPersons, persons}) => {
+  const handleDelClick = () => {
+    const result = window.confirm(`Delete ${person.name}`)
+    if (result) { 
+      personService
+        .remove(person.id)
+        .catch(e =>
+          alert("already removed")
+        )
+      setPersons(persons.filter(p => p.id !== person.id))
+    } else window.alert("Operation cancelled")
+  }
   return (
-    <p>{person.name}  {person.number}</p>
+    <button onClick={handleDelClick}>delete</button>
   )
 }
 
-const Persons = ({persons}) => (
+const Person = ({person, setPersons, persons}) => {
+  return (
+    <p>{person.name}  {person.number} <DelButton person={person} setPersons={setPersons} persons={persons}/></p>
+  )
+}
+
+const Persons = ({persons, filter, setPersons}) => {
+  const filtered = persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()))
+  return(
   <div>
-    {persons.map(p => <Person key={p.name} person={p} />)}
+    {filtered.map(p => <Person key={p.name} person={p} setPersons={setPersons} persons={persons}/>)}
   </div>
-)
+  )
+}
 
 const PersonForm = ({addName, newName, newNumber, handleNameChange, handleNumberChange}) => {
   //console.log("aa", newName)
@@ -39,27 +61,33 @@ const PersonForm = ({addName, newName, newNumber, handleNameChange, handleNumber
 
 const Filter = ({newFilter, handleFilterChange}) => (
   <input  value={newFilter} 
-              onChange={handleFilterChange}
+          onChange={handleFilterChange}
   />
 )
 
 
 
 const App = () => {
-  const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ]) 
+  const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ newFilter, setNewFilter ] = useState('')
-  const [ newShow, setShow ] = useState(persons)
+
+  const getHook = () => {
+    personService
+      .getAll()
+      .then(data => {
+        setPersons(data)
+        //console.log("loaded")
+      })
+  }
+
+  useEffect(getHook, [])
+
+  //console.log('render', persons.length, 'persons')
 
   const addName = (event) => {
     event.preventDefault()
-    //console.log('button: ', event.target)
 
     let isNameNew = (persons.filter(p => p.name===newName)).length === 0
     
@@ -68,20 +96,30 @@ const App = () => {
         name: newName,
         number: newNumber
       }
-      const temp = persons.concat(nameObj)
-      setPersons(temp)
-      setNewName('')
-      setNewNumber('')
-      setShow(filteredPersons(temp, newFilter))
-      console.log("show", temp)
+      personService
+        .create(nameObj)
+        .then(returned => {
+          setPersons(persons.concat(returned))
+          setNewName('')
+          setNewNumber('')
+        })
     } else {
-      window.alert(`${newName} is already added`)
+      const res = window.confirm(`${newName} is already added. Replace old number?`)
+      if (res) {
+        const oldP = persons.find(p => p.name === newName)
+        const editedP = {...oldP, number: newNumber}
+        personService
+          .update(editedP.id, editedP)
+          .then(returned =>
+            setPersons(persons.map(p=> p.name !== newName ? p : returned ) ) 
+          )
+      } else {
+        window.alert("OK")
+      }
+      
     }
   }
 
-  function filteredPersons(per, fil) {
-    return per.filter(p => p.name.toLowerCase().includes(fil.toLowerCase()))
-  }
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -91,7 +129,6 @@ const App = () => {
   const handleFilterChange = (event) => {
     const value = event.target.value
     setNewFilter(value)
-    setShow(filteredPersons(persons, value))
   }
 
 
@@ -110,7 +147,7 @@ const App = () => {
                   handleNumberChange={handleNumberChange}                  
                   />
       <h2>Numbers</h2>
-      <Persons persons={newShow} />
+      <Persons persons={persons} filter={newFilter} setPersons={setPersons} />
     </div>
   )
 
