@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 //import axios from 'axios'
 import personService from './services/persons'
+import './App.css'
 
 const DelButton = ({person, setPersons, persons}) => {
   const handleDelClick = () => {
@@ -65,6 +66,14 @@ const Filter = ({newFilter, handleFilterChange}) => (
   />
 )
 
+const Notification = ({message}) => {
+  if (!message) return null
+  return (
+    <div className={`notification ${message.color}`}>
+      {message.msg}
+    </div>
+  )
+}
 
 
 const App = () => {
@@ -72,6 +81,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ newFilter, setNewFilter ] = useState('')
+  const [ message, setMessage] = useState(null)
 
   const getHook = () => {
     personService
@@ -102,6 +112,13 @@ const App = () => {
           setPersons(persons.concat(returned))
           setNewName('')
           setNewNumber('')
+          setMessage({
+            msg: `Added ${returned.name}`,
+            color: 'green' 
+          })
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
     } else {
       const res = window.confirm(`${newName} is already added. Replace old number?`)
@@ -110,9 +127,25 @@ const App = () => {
         const editedP = {...oldP, number: newNumber}
         personService
           .update(editedP.id, editedP)
-          .then(returned =>
-            setPersons(persons.map(p=> p.name !== newName ? p : returned ) ) 
-          )
+          .then(returned => {
+            setPersons(persons.map(p=> p.name !== newName ? p : returned ) )
+            setMessage({
+              msg: `Changed number for ${returned.name}`,
+              color: 'green'
+            })
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+          })
+          .catch(error => {
+            setMessage({
+              msg: `Information of ${newName} has already been removed from server`,
+              color: 'red'
+            })
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+          })
       } else {
         window.alert("OK")
       }
@@ -135,6 +168,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <p>filter shown with 
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
       
