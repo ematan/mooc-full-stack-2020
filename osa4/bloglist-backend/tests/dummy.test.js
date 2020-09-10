@@ -1,6 +1,5 @@
 const listHelper = require('../utils/list_helper')
 const data = require('./blogs')
-const { totalLikes } = require('../utils/list_helper')
 const blogs = data.blogs
 
 
@@ -11,7 +10,7 @@ test('dummy returns one', () => {
 
 
 describe('totalLikes', () => {
-  test('totalLikes returns all likes (36)', () =>{
+  test('totalLikes returns all likes (36)', () => {
     const result = listHelper.totalLikes(blogs)
     expect(result).toBe(36)
   })
@@ -23,13 +22,13 @@ describe('totalLikes', () => {
   })
 
   test('of array of length 1 returns likes for that object', () => {
-    const single_blog = [{ 
-      _id: "5a422a851b54a676234d17f7", 
-      title: "React patterns", 
-      author: "Michael Chan", 
-      url: "https://reactpatterns.com/", 
-      likes: 7, 
-      __v: 0 
+    const single_blog = [{
+      _id: '5a422a851b54a676234d17f7',
+      title: 'React patterns',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: 7,
+      __v: 0
     }]
     const result = listHelper.totalLikes(single_blog)
     expect(result).toBe(7)
@@ -39,9 +38,9 @@ describe('totalLikes', () => {
 describe('favoriteBlog', () => {
   test('finds first blog with most likes', () => {
     const result = listHelper.favoriteBlog(blogs)
-    const comparison = { 
-      title: "Canonical string reduction", 
-      author: "Edsger W. Dijkstra", 
+    const comparison = {
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
       likes: 12
     }
     expect(result).toEqual(comparison)
@@ -59,7 +58,7 @@ describe('mostBlogs', () => {
   test('mostBlogs', () => {
     const result = listHelper.mostBlogs(blogs)
     const comparison = {
-      author: "Robert C. Martin", 
+      author: 'Robert C. Martin',
       blogs: 3
     }
     expect(result).toEqual(comparison)
@@ -77,7 +76,7 @@ describe('mostLikes', () => {
   test('mostLikes', () => {
     const result = listHelper.mostLikes(blogs)
     const comparison = {
-      author: "Edsger W. Dijkstra", 
+      author: 'Edsger W. Dijkstra',
       likes: 17
     }
     expect(result).toEqual(comparison)
