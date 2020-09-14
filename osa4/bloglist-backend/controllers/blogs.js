@@ -11,9 +11,12 @@ blogsRouter.get('/', (request, response) => {
 })
 
 blogsRouter.post('/', (request, response) => {
-  console.log(request.body)
-  const blog = new Blog(request.body)
-  console.log(blog)
+  const body = request.body
+  if(!body.title || !body.url) {
+    return response.status(400).json({ error: 'Required field missing' })
+  }
+
+  const blog = new Blog(body)
 
   blog
     .save()

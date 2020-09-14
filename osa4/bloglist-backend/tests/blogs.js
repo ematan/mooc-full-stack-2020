@@ -1,4 +1,4 @@
-const blogs = [
+const initialBlogs = [
   {
     _id: '5a422a851b54a676234d17f7',
     title: 'React patterns',
@@ -44,6 +44,32 @@ const blogs = [
   }
 ]
 
+const newBlog = {
+  title: 'Working title',
+  author: 'Teemu Teekkari',
+  url: 'https://test.com',
+  likes: 3
+}
+
+const newBlog_noLikes = {
+  title: 'Working title2',
+  author: 'Tiina Teekkari',
+  url: 'https://test.com',
+}
+
+const newBlog_noTitle = {
+  author: 'Tiina Teekkari',
+  url: 'https://test.com',
+  likes: 3
+}
+
+const newBlog_noUrl = {
+  title: 'Working title2',
+  author: 'Tiina Teekkari',
+  likes: 3
+}
+
+
 module.exports = {
-  blogs
+  initialBlogs, newBlog, newBlog_noLikes, newBlog_noTitle, newBlog_noUrl
 }
