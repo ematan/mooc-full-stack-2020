@@ -95,6 +95,70 @@ describe('default', () => {
   })
 })
 
+describe('DELETE', () => {
+  test('API should return correct amount of blogs after DELETE', async () => {
+    const resp = await api.get('/api/blogs')
+    const id = resp.body[0].id
+    await api.delete(`/api/blogs/${id}`).expect(204)
+
+    const resp2 = await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    expect(resp2.body.length).toBe(initialBlogs.length -1)
+  })
+
+  test('Incorrect or missing id should return 404', async () => {
+    await api.delete('/api/blogs/test').expect(404)
+    await api.delete('/api/blogs/').expect(404)
+    const response = await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    expect(response.body.length).toBe(initialBlogs.length)
+  })
+
+})
+
+describe('UPDATE', () => {
+  test('API should return correct amount of blogs after UPDATE', async () => {
+    const resp = await api.get('/api/blogs')
+    const blog = resp.body[0]
+    blog.likes = blog.likes+1
+    await api.put(`/api/blogs/${blog.id}`).send(blog).expect(200)
+
+    const resp2 = await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    expect(resp2.body.length).toBe(initialBlogs.length)
+  })
+
+  test('Incorrect or missing id should return 404', async () => {
+    await api.put('/api/blogs/test').send(newBlog).expect(404)
+    await api.put('/api/blogs/').send(newBlog).expect(404)
+    const response = await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    expect(response.body.length).toBe(initialBlogs.length)
+  })
+
+  test('API should return correct blog after UPDATE', async () => {
+    const resp = await api.get('/api/blogs')
+    const blog = resp.body[0]
+    await api.put(`/api/blogs/${blog.id}`).send(newBlog).expect(200)
+
+    const resp2 = await api
+      .get(`/api/blogs/${blog.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    expect(resp2.body).toMatchObject(newBlog)
+  })
+
+})
+
+
 
 afterAll(() => {
   mongoose.connection.close()
