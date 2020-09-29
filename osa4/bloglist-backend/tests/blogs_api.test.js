@@ -11,12 +11,9 @@ const api = supertest(app)
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  //console.log('testDB cleared')
-
   const blogObjects = initialBlogs.map(blog => new Blog(blog))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
-  //console.log('DB initialized')
 })
 
 
@@ -108,8 +105,10 @@ describe('DELETE', () => {
     expect(resp2.body.length).toBe(initialBlogs.length -1)
   })
 
-  test('Incorrect or missing id should return 404', async () => {
-    await api.delete('/api/blogs/test').expect(404)
+  test('Incorrect or missing id should return error', async () => {
+    //400 Bad request
+    await api.delete('/api/blogs/test').expect(400)
+    //404 Not found
     await api.delete('/api/blogs/').expect(404)
     const response = await api
       .get('/api/blogs')
@@ -134,8 +133,8 @@ describe('UPDATE', () => {
     expect(resp2.body.length).toBe(initialBlogs.length)
   })
 
-  test('Incorrect or missing id should return 404', async () => {
-    await api.put('/api/blogs/test').send(newBlog).expect(404)
+  test('Incorrect or missing id should return error', async () => {
+    await api.put('/api/blogs/test').send(newBlog).expect(400)
     await api.put('/api/blogs/').send(newBlog).expect(404)
     const response = await api
       .get('/api/blogs')
