@@ -1,9 +1,10 @@
 POST http://localhost:3001/api/blogs
 content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWQiOiI1ZjcyZjJlN2JlOGU3M2ExZDNmYjYxMTQiLCJpYXQiOjE2MDEzOTA2MTl9.Tr2vJyPEZjbvjZrtKJc-Z2KKCDiJHqtvKHWm73GtdXM
 
 {
-    "title": "Blogpost2",
+    "title": "Authorized post 3",
     "author": "someone",
-    "url": "lorem ipsum",
+    "url": "test.com",
     "likes": 0
 }
