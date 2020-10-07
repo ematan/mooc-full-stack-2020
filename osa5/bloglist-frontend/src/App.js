@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
+import userService from './services/users'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import CreateForm from './components/CreateForm'
@@ -22,11 +23,14 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [users, setUsers] = useState([])
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )
+    userService.getAll().then(users =>
+      setUsers( users ))
   }, [])
 
   useEffect(() => {
@@ -99,6 +103,28 @@ const App = () => {
       })
   }
 
+  const handleLikes = (event) => {
+    event.preventDefault()
+    const id = event.target.value
+    const blog = blogs.find(blog => blog.id === id)
+    const updatedBlog = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes+1,
+      user: blog.user.id
+    }
+
+    blogService
+      .update(id, updatedBlog)
+      .then(returnedBlog => {
+        returnedBlog.user = users.find(user => returnedBlog.user === user.id)
+        setBlogs(blogs.map(blog => blog.id === id ? returnedBlog : blog))
+      })
+      .catch(error => console.log(error))
+
+  }
+
 
 
   const LogOut = () => (
@@ -137,7 +163,7 @@ const App = () => {
           </Togglable>
           <h2>Blogs on server:</h2>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} handleLikes={handleLikes}/>
           )}
         </div>
       }
