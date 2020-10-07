@@ -21,9 +21,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -78,44 +75,28 @@ const App = () => {
     }
   }
 
-  const handleCreateSubmit = async (event) => {
-    event.preventDefault()
-    try {
-      const blogObject = {
-        title: title,
-        author: author,
-        url: url
-      }
-
-      blogService
-        .create(blogObject)
-        .then(returnedBlog => {
-          setBlogs(blogs.concat(returnedBlog))
-          setTitle('')
-          setAuthor('')
-          setUrl('')
-          setErrorMessage({
-            msg:`Added new blog ${returnedBlog.title} by ${returnedBlog.author}`,
-            color: 'green'
-          })
-          setTimeout(() => {
-            setErrorMessage(null)
-          }, 5000)
+  const handleCreateSubmit = (blogObject) => {
+    blogService
+      .create(blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        setErrorMessage({
+          msg:`Added new blog ${returnedBlog.title} by ${returnedBlog.author}`,
+          color: 'green'
         })
-        .catch(error => {
-          //console.log("Error msg:",error.response.data.error)
-          setErrorMessage({
-            msg: error.response.data.error,
-            color: 'red'
-          })
-          setTimeout(() => {
-            setErrorMessage(null)
-          }, 5000)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+      .catch(error => {
+        setErrorMessage({
+          msg: error.response.data.error,
+          color: 'red'
         })
-
-    } catch (exception) {
-      console.log(exception)
-    }
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
   }
 
 
@@ -150,13 +131,7 @@ const App = () => {
 
           <p>Hello {user.name} <LogOut /></p>
           <CreateForm
-            title={title}
-            author={author}
-            url={url}
-            handleTitleChange={({target}) => setTitle(target.value)}
-            handleAuthorChange={({target}) => setAuthor(target.value)}
-            handleUrlChange={({target}) => setUrl(target.value)}
-            handleSubmit={handleCreateSubmit}
+            createBlog={handleCreateSubmit}
           />
           <h2>Blogs on server:</h2>
           {blogs.map(blog =>
