@@ -182,7 +182,7 @@ describe('DELETE', () => {
     const id = resp.body[0].id
     await api.delete(`/api/blogs/${id}`).expect(401)
 
-    const loginResponse = await api.post('/api/login').send({username: 'badtester', password: 'wrong'})
+    const loginResponse = await api.post('/api/login').send({ username: 'badtester', password: 'wrong' })
     const token = loginResponse.body.token
     await api.delete(`/api/blogs/${id}`).set('Authorization', `Bearer ${token}`).expect(401)
   })
