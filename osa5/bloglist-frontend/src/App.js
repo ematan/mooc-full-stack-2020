@@ -55,6 +55,7 @@ const App = () => {
         'loggedBlogappUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
+      console.log(user)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -122,10 +123,30 @@ const App = () => {
         setBlogs(blogs.map(blog => blog.id === id ? returnedBlog : blog))
       })
       .catch(error => console.log(error))
-
   }
 
-
+  const handleRemove = (event) => {
+    event.preventDefault()
+    const id = event.target.value
+    const blog = blogs.find(blog => blog.id === id)
+    const confirmed = window.confirm(`Remove ${blog.title} by ${blog.author}?`)
+    if (confirmed){
+      //console.log('agree')
+      blogService
+        .remove(id)
+        .then(response => {
+          setBlogs(blogs.filter(blog => blog.id !== id))
+          setErrorMessage({
+            msg: `${blog.title} succesfully removed`,
+            color: 'green'
+          })
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
+        .catch(error => console.log(error))
+    }
+  }
 
   const LogOut = () => (
     <button onClick={handleLogout}>logout</button>
@@ -162,8 +183,15 @@ const App = () => {
             />
           </Togglable>
           <h2>Blogs on server:</h2>
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} handleLikes={handleLikes}/>
+          {blogs
+            .sort((a,b) => b.likes - a.likes)
+            .map(blog =>
+              <Blog key={blog.id}
+                    user={user}
+                    blog={blog}
+                    handleLikes={handleLikes}
+                    handleRemove={handleRemove}
+              />
           )}
         </div>
       }
