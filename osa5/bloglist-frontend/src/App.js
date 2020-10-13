@@ -6,15 +6,19 @@ import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import CreateForm from './components/CreateForm'
 import Togglable from './components/Togglable'
+import PropTypes from 'prop-types'
 import './App.css'
 
-const Notification = ({message}) => {
+const Notification = ({ message }) => {
   if (!message) return null
   return (
     <div className={`notification ${message.color}`}>
       {message.msg}
     </div>
   )
+}
+Notification.propTypes = {
+  message: PropTypes.object
 }
 
 const App = () => {
@@ -50,12 +54,11 @@ const App = () => {
       const user = await loginService.login({
         username, password
       })
-
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
-      console.log(user)
+
       setUser(user)
       setUsername('')
       setPassword('')
@@ -134,7 +137,7 @@ const App = () => {
       //console.log('agree')
       blogService
         .remove(id)
-        .then(response => {
+        .then(() => {
           setBlogs(blogs.filter(blog => blog.id !== id))
           setErrorMessage({
             msg: `${blog.title} succesfully removed`,
@@ -151,8 +154,6 @@ const App = () => {
   const LogOut = () => (
     <button onClick={handleLogout}>logout</button>
   )
-
-
 
   return (
     <div>
@@ -186,13 +187,15 @@ const App = () => {
           {blogs
             .sort((a,b) => b.likes - a.likes)
             .map(blog =>
-              <Blog key={blog.id}
-                    user={user}
-                    blog={blog}
-                    handleLikes={handleLikes}
-                    handleRemove={handleRemove}
+              <Blog
+                key={blog.id}
+                user={user}
+                blog={blog}
+                handleLikes={handleLikes}
+                handleRemove={handleRemove}
               />
-          )}
+            )
+          }
         </div>
       }
 

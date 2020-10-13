@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const CreateForm = ({ createBlog }) => {
   const [title, setTitle] = useState('')
@@ -23,40 +24,44 @@ const CreateForm = ({ createBlog }) => {
 
   return (
     <div>
-        <h2>Create new</h2>
-        <form onSubmit={addBlog}>
-          <div>
-            title:
-            <input
-              type='text'
-              value={title}
-              name='Title'
-              onChange={handleTitleChange}
-            />
-          </div>
-          <div>
-            author:
-            <input
-              type='text'
-              value={author}
-              name='Author'
-              onChange={handleAuthorChange}
-            />
-          </div>
-          <div>
-            url:
-            <input
-              type='text'
-              value={url}
-              name='Url'
-              onChange={handleUrlChange}
-            />
-          </div>
-          <button type='submit'>create</button>
-        </form>
+      <h2>Create new</h2>
+      <form onSubmit={addBlog}>
+        <div>
+          title:
+          <input
+            type='text'
+            value={title}
+            name='Title'
+            onChange={handleTitleChange}
+          />
+        </div>
+        <div>
+          author:
+          <input
+            type='text'
+            value={author}
+            name='Author'
+            onChange={handleAuthorChange}
+          />
+        </div>
+        <div>
+          url:
+          <input
+            type='text'
+            value={url}
+            name='Url'
+            onChange={handleUrlChange}
+          />
+        </div>
+        <button type='submit'>create</button>
+      </form>
 
-      </div>
+    </div>
   )
-  }
+}
+
+CreateForm.propTypes = {
+  createBlog: PropTypes.func.isRequired,
+}
 
 export default CreateForm

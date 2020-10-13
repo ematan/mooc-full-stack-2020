@@ -25,7 +25,7 @@ const update = async (id, newObject) => {
   return response.data
 }
 
-const remove = async (id, newObject) => {
+const remove = async (id) => {
   const config = {
     headers: { Authorization: token },
   }

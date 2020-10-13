@@ -1,8 +1,9 @@
 module.exports = {
+  'root': true,
   'env': {
     'browser': true,
-    'es2021': true,
-    'commonjs': true,
+    'es6': true,
+    'jest/globals': true,
   },
   'extends': [
     'eslint:recommended',
@@ -18,11 +19,11 @@ module.exports = {
     'ecmaFeatures': {
       'jsx': true
     },
-    'ecmaVersion': 12,
+    'ecmaVersion': 2018,
     'sourceType': 'module'
   },
   'plugins': [
-    'react'
+    'react', 'jest'
   ],
   'rules': {
     'indent': [
@@ -49,6 +50,7 @@ module.exports = {
     'arrow-spacing': [
       'error', { 'before': true, 'after': true }
     ],
-    'no-console': 0
+    'no-console': 0,
+    'react/proptypes': 0
   }
 }
