@@ -1,13 +1,15 @@
+// eslint-disable-next-line no-undef
 module.exports = {
   'root': true,
   'env': {
     'browser': true,
     'es6': true,
     'jest/globals': true,
+    'cypress/globals': true
   },
   'extends': [
     'eslint:recommended',
-    'plugin:react/recommended'
+    'plugin:react/recommended',
   ],
   'settings': {
     'react': {
@@ -23,7 +25,7 @@ module.exports = {
     'sourceType': 'module'
   },
   'plugins': [
-    'react', 'jest'
+    'react', 'jest', 'cypress'
   ],
   'rules': {
     'indent': [
