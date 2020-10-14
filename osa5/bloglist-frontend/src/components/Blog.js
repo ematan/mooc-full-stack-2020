@@ -4,8 +4,7 @@ import PropTypes from 'prop-types'
 const Blog = ({ user, blog, handleLikes, handleRemove }) => {
   const [showInfo, setShow] = useState(false)
 
-  const hideWhenVisible = { display: showInfo ? 'none' : '' }
-  const showWhenVisible = { display: showInfo ? '' : 'none' }
+  const ExpandStatus = { display: showInfo ? '' : 'none' }
 
   const id = blog.id
   const userIsCreator = blog.user.username === user.username
@@ -19,15 +18,20 @@ const Blog = ({ user, blog, handleLikes, handleRemove }) => {
     marginBottom: 5
   }
 
+  const ExpandButton = () => (
+    <button className='expandButton' onClick={() => setShow(!showInfo)}>
+      {showInfo ? 'hide' : 'view'}
+    </button>
+  )
+
   return (
     <div style={blogStyle}>
       <b>{blog.title}</b> {blog.author}
-      <button style={hideWhenVisible} onClick={() => setShow(true)}>view</button>
-      <button style={showWhenVisible} onClick={() => setShow(false)}>hide</button>
-      <div style={showWhenVisible}>
+      <ExpandButton />
+      <div className='extraInfo' style={ExpandStatus}>
 
         {blog.url} <br/>
-        Likes {blog.likes} <button value={id} onClick={handleLikes}>like</button><br/>
+        Likes {blog.likes} <button className='likeButton' value={id} onClick={handleLikes}>like</button><br/>
         {blog.user.name} <br/>
         {userIsCreator && <button value={id} onClick={handleRemove}>remove</button>}
       </div>
