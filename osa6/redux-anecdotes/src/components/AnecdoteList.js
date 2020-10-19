@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addVote } from '../reducers/anecdoteReducer'
 import { setNotification, clearNotification } from '../reducers/notificationReducer'
+import PropTypes from 'prop-types'
 
 
 const Anecdote = ({ anecdote, handleClick }) => {
@@ -18,10 +19,16 @@ const Anecdote = ({ anecdote, handleClick }) => {
   )
 }
 
+Anecdote.propTypes = {
+  anecdote: PropTypes.object.isRequired,
+  handleClick: PropTypes.func.isRequired
+}
+
 const AnecdoteList = () => {
 
   const anecdotes = useSelector(state => {
     const currentFilter = state.filter.toLowerCase()
+    console.log(state.anecdotes)
     return state.anecdotes.filter(a => a.content.toLowerCase().includes(currentFilter))
   })
   const dispatch = useDispatch()
