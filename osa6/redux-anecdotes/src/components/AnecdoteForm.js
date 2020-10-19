@@ -1,19 +1,18 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
 import { setNotification } from '../reducers/notificationReducer'
-//import anecdoteService from '../services/anecdotes'
+import PropTypes from 'prop-types'
 
-const AnecdoteForm = () => {
-  const dispatch = useDispatch()
+const AnecdoteForm = (props) => {
 
   const addAnecdote = async (event) => {
     event.preventDefault()
     const anecdote = event.target.anecdote.value
     event.target.anecdote.value = ''
 
-    dispatch(createAnecdote(anecdote))
-    dispatch(setNotification(`Added: ${anecdote}`, 10))
+    props.createAnecdote(anecdote)
+    props.setNotification(`Added: ${anecdote}`, 5)
   }
 
   return (
@@ -25,7 +24,14 @@ const AnecdoteForm = () => {
       </form>
     </div>
   )
-
 }
 
-export default AnecdoteForm
+AnecdoteForm.propTypes = {
+  createAnecdote: PropTypes.func.isRequired,
+  setNotification: PropTypes.func.isRequired
+}
+
+export default connect(
+  null,
+  { createAnecdote, setNotification }
+)(AnecdoteForm)
