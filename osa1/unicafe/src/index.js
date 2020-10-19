@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const Button = ({handleClick, text}) => {
-	return (
-		<button onClick={handleClick}>
-		{text}
-		</button>
-	)
+  return (
+    <button onClick={handleClick}>
+    {text}
+    </button>
+  )
 }
 
 const StatisticLine = ({text, value, unit}) => (
@@ -15,16 +15,16 @@ const StatisticLine = ({text, value, unit}) => (
 
 const Statistics = (props) => {
   const {good, neutral, bad} = props.values
-	const total = good + bad + neutral
-	const avg = (good - bad) / total
-	const posit = good / total * 100
+  const total = good + bad + neutral
+  const avg = (good - bad) / total
+  const posit = good / total * 100
 
   return (
       <div>
         <h1>Statistic</h1>
         <div>
           {total===0
-          ? <div>Ei yhtään palautetta annettu</div>
+          ? <div>No feedback received</div>
           :	<table><tbody>
               <StatisticLine text='good' value={good} />
               <StatisticLine text='neutral' value={neutral} />
@@ -46,10 +46,10 @@ const App = () => {
 
   const increase = (value, func) => func(value)
   const values = {
-		good: good,
-		neutral: neutral,
-		bad: bad
-	}
+    good: good,
+    neutral: neutral,
+    bad: bad
+  }
 
   return (
     <div>

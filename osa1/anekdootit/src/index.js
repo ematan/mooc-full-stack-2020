@@ -7,45 +7,42 @@ const App = (props) => {
 
   const random = () => Math.floor(Math.random() * props.anecdotes.length)
   const vote = () => {
-  	const copy = [...votes]
-  	copy[selected] += 1
-  	setVotes(copy)
+    const copy = [...votes]
+    copy[selected] += 1
+    setVotes(copy)
   }
 
   const best = () => votes.indexOf(Math.max(...votes))
-  console.log(best())
 
-
-  //console.log(selected)
   return (
     <div>
-    	<h1>Anecdote of the day</h1>
+      <h1>Anecdote of the day</h1>
       <p>
-      	{props.anecdotes[selected]}
-      	<br />
-      	has {votes[selected]} votes
+        {props.anecdotes[selected]}
+        <br />
+        has {votes[selected]} votes
       </p>
 
       <Button
-      	handleClick={() => vote()}
-      	text='vote'
+        handleClick={() => vote()}
+        text='vote'
       />
       <Button
-      	handleClick={() => setSelected(random())}
-      	text='next anecdote'
+        handleClick={() => setSelected(random())}
+        text='next anecdote'
       />
       <h1>Anecdote with most votes</h1>
-     	{props.anecdotes[best()]}
+       {props.anecdotes[best()]}
     </div>
   )
 }
 
 const Button = ({text, handleClick}) => {
-	return(
-		<button onClick={handleClick}>
-		{text}
-		</button>
-	)
+  return(
+    <button onClick={handleClick}>
+    {text}
+    </button>
+  )
 }
 
 const anecdotes = [
