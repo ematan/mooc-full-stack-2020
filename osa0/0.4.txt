@@ -1,0 +1,48 @@
+title Honkamaa 2020
+
+
+note over browser:
+browser collects input data
+from form input field
+and sends that with a
+POST request to the server
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+
+note over server:
+server saves received data and
+sends a response status (302)
+and redirects browser to /notes
+end note
+
+server-->browser: 302 /notes
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+
+note over server:
+server responses with html for
+/notes with updated information
+from server (in other words,
+containing the new note)
+end note
+
+server-->browser: html-code
+
+note over browser:
+browser starts requesting elements
+in html. After this point everything
+progresses just like normal.
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: main.js
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{ content: "HTML is easy", date: "2019-05-23" }, ...]
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note

@@ -1,0 +1,28 @@
+title Honkamaa 2020
+
+note over browser:
+browser collects input data
+and timestamp and sends that
+data in JSON format with
+POST request to the server
+(the page is not loaded again)
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over server:
+server saves received data and
+sends a response status (201 Created)
+and redirects browser to /notes
+end note
+
+server-->browser: 201 html-code
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+(browser does not request updated
+data from server, instead the new
+note is added in the existing list
+of notes on browser)
+end note
