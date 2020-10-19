@@ -1,56 +1,50 @@
-//import anecdoteService from '../services/anecdote'
+import anecdoteService from '../services/anecdotes'
 
-/*const getId = () => (100000 * Math.random()).toFixed(0)
-
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0
-  }
-}*/
-
-const initialState = []//anecdotesAtStart.map(asObject)
-
-const reducer = (state = initialState, action) => {
+const reducer = (state = [], action) => {
   switch (action.type) {
     case 'VOTE': {
-      const id = action.data.id
-      const anecdoteToChange = state.find(n => n.id === id)
-      const changedAnecdote = {
-        ...anecdoteToChange,
-        votes: anecdoteToChange.votes + 1
-      }
-
-      return state.map(a => a.id !== id ? a : changedAnecdote)
+      const changedAnecdote = action.data
+      return state.map(a => a.id !== changedAnecdote.id ? a : changedAnecdote)
     }
     case 'NEW_ANECDOTE':
       return [...state, action.data]
     case 'INIT_ANECDOTES':
-      return action.data
+      return action.data.anecdotes
     default:
       return state
   }
 }
 
 export const addVote = (id) => {
-  return {
-    type: 'VOTE',
-    data: { id }
+  return async dispatch => {
+    const anecdoteToChange = await anecdoteService.getOne(id)
+    const changedAnecdote = { ...anecdoteToChange, votes: anecdoteToChange.votes+1 }
+    await anecdoteService.update(changedAnecdote)
+
+    dispatch({
+      type: 'VOTE',
+      data: changedAnecdote
+    })
   }
 }
 
-export const createAnecdote = (data) => {
-  return {
-    type: 'NEW_ANECDOTE',
-    data
+export const createAnecdote = (anecdote) => {
+  return async dispatch => {
+    const newAnecdote = await anecdoteService.createNew(anecdote)
+    dispatch({
+      type: 'NEW_ANECDOTE',
+      data: newAnecdote
+    })
   }
 }
 
-export const initializeAnecdotes = (anecdotes) => {
-  return {
-    type: 'INIT_ANECDOTES',
-    data: anecdotes
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch({
+      type: 'INIT_ANECDOTES',
+      data: { anecdotes }
+    })
   }
 }
 
