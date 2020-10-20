@@ -1,70 +1,9 @@
 import React, { useState, useEffect } from 'react'
-//import axios from 'axios'
 import personService from './services/persons'
 import './App.css'
-
-const DelButton = ({person, setPersons, persons}) => {
-  const handleDelClick = () => {
-    const result = window.confirm(`Delete ${person.name}`)
-    if (result) { 
-      personService
-        .remove(person.id)
-        .catch(e =>
-          alert("already removed")
-        )
-      setPersons(persons.filter(p => p.id !== person.id))
-    } else window.alert("Operation cancelled")
-  }
-  return (
-    <button onClick={handleDelClick}>delete</button>
-  )
-}
-
-const Person = ({person, setPersons, persons}) => {
-  return (
-    <p>{person.name}  {person.number} <DelButton person={person} setPersons={setPersons} persons={persons}/></p>
-  )
-}
-
-const Persons = ({persons, filter, setPersons}) => {
-  const filtered = persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()))
-  return(
-  <div>
-    {filtered.map(p => <Person key={p.name} person={p} setPersons={setPersons} persons={persons}/>)}
-  </div>
-  )
-}
-
-const PersonForm = ({addName, newName, newNumber, handleNameChange, handleNumberChange}) => {
-  //console.log("aa", newName)
-  return (
-    <form onSubmit={addName}>
-      <div>
-          name: <input 
-                  value={newName} 
-                  onChange={handleNameChange}
-                />
-        </div>
-        <div>
-          number: <input 
-                  value={newNumber} 
-                  onChange={handleNumberChange}
-                />
-        </div>
-        
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-  )
-
-}
-
-const Filter = ({newFilter, handleFilterChange}) => (
-  <input  value={newFilter} 
-          onChange={handleFilterChange}
-  />
-)
+import PersonForm from './components/PersonForm'
+import Filter from './components/Filter'
+import PersonList from './components/PersonList'
 
 const Notification = ({message}) => {
   if (!message) return null
@@ -75,9 +14,8 @@ const Notification = ({message}) => {
   )
 }
 
-
 const App = () => {
-  const [ persons, setPersons] = useState([]) 
+  const [ persons, setPersons] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ newFilter, setNewFilter ] = useState('')
@@ -88,19 +26,16 @@ const App = () => {
       .getAll()
       .then(data => {
         setPersons(data)
-        //console.log("loaded")
       })
   }
 
   useEffect(getHook, [])
 
-  //console.log('render', persons.length, 'persons')
-
   const addName = (event) => {
     event.preventDefault()
 
     let isNameNew = (persons.filter(p => p.name===newName)).length === 0
-    
+
     if (isNameNew) {
       const nameObj = {
         name: newName,
@@ -114,7 +49,7 @@ const App = () => {
           setNewNumber('')
           setMessage({
             msg: `Added ${returned.name}`,
-            color: 'green' 
+            color: 'green'
           })
           setTimeout(() => {
             setMessage(null)
@@ -149,7 +84,6 @@ const App = () => {
       } else {
         window.alert("OK")
       }
-      
     }
   }
 
@@ -169,19 +103,19 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Notification message={message} />
-      <p>filter shown with 
+      <p>filter shown with
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
-      
+
     </p>
       <h2>add a new</h2>
       <PersonForm addName={addName}
                   newName={newName}
                   newNumber={newNumber}
                   handleNameChange={handleNameChange}
-                  handleNumberChange={handleNumberChange}                  
+                  handleNumberChange={handleNumberChange}
                   />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={newFilter} setPersons={setPersons} />
+      <PersonList persons={persons} filter={newFilter} setPersons={setPersons} />
     </div>
   )
 
