@@ -6,16 +6,16 @@ const Header = ({course}) => (
 
 
 const Part = ({part}) => (
-	<p>{part.name} {part.exercises}</p>
+  <p>{part.name} {part.exercises}</p>
 )
 
 const Content = ({parts}) => {
-  const all_parts = () => 
+  const all_parts = () =>
     parts.map((part) => <Part key={part.id} part={part} />)
   return (
     <div>
-			{all_parts()}
-  	</div>
+      {all_parts()}
+    </div>
   )
 }
 
