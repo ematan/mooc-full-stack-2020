@@ -51,12 +51,12 @@ const Weather = ({country}) => {
     })
   }
   useEffect(getWeather, [])
-  
+
   if (!weather) {
     return (
       <div>"Loading weather"</div>
     )
-  } else { 
+  } else {
     return (
       <div>
         <h2>Weather in {weather.location.name}</h2>
@@ -70,7 +70,7 @@ const Weather = ({country}) => {
 
 
 const Display = ({countries, filter, setNewFilter}) =>{
-  
+
   function filterCountries(list, fil) {
     return list.filter(c => c.name.toLowerCase().includes(fil.toLowerCase()))
   }
@@ -90,27 +90,20 @@ const Display = ({countries, filter, setNewFilter}) =>{
 const App = () => {
   const [countries, setCountries] = useState([])
   const [newFilter, setNewFilter] = useState('')
-  //const [filteredList, setNewFilteredList] = useState([])
-  
+
   const handleFilterChange = (event) => {
     setNewFilter(event.target.value)
-    //setNewFilteredList(filterCountries(countries, event.target.value))
   }
- 
+
 
   const hook = () => {
     axios
       .get('https://restcountries.eu/rest/v2/all')
       .then(response => {
         setCountries(response.data)
-        //setNewFilteredList(response.data)
       })
   }
   useEffect(hook, [])
-
-  //console.log('countries: ', filteredList.length)
-
-  
 
   return (
     <div>
