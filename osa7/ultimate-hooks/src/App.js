@@ -56,9 +56,8 @@ const App = () => {
   const content = useField('text')
   const name = useField('text')
   const number = useField('text')
-  //TODO: fix port back to 3005 (also in package.json)
-  const [notes, noteService] = useResource('http://localhost:3001/notes')
-  const [persons, personService] = useResource('http://localhost:3001/persons')
+  const [notes, noteService] = useResource('http://localhost:3005/notes')
+  const [persons, personService] = useResource('http://localhost:3005/persons')
 
   const handleNoteSubmit = (event) => {
     event.preventDefault()
