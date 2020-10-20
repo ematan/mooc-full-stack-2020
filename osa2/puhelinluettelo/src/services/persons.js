@@ -3,12 +3,6 @@ const baseUrl = 'http://localhost:3001/persons'
 
 const getAll = () => {
     const req = axios.get(baseUrl)
-    /*const nonExisting = {
-        id: 10000,
-        name: 'Fake Person',
-        number: '000000000'
-    }*/
-    //return req.then(response => response.data.concat(nonExisting))
     return req.then(response => response.data)
 }
 
