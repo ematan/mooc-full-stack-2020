@@ -1,38 +1,50 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { login } from '../reducers/userReducer'
 
-const LoginForm = ({ handleSubmit, username, password, handleUsernameChange, handlePasswordChange }) => (
-  <form onSubmit={handleSubmit}>
-    <div>
-      username
-      <input
-        id='username'
-        type='text'
-        value={username}
-        name='Username'
-        onChange={handleUsernameChange}
-      />
-    </div>
-    <div>
-      password
-      <input
-        id='password'
-        type='password'
-        value={password}
-        name='Password'
-        onChange={handlePasswordChange}
-      />
-    </div>
-    <button id='login-button' type='submit'>login</button>
-  </form>
-)
+const LoginForm = () => {
+  const dispatch = useDispatch()
 
-LoginForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
-  handleUsernameChange: PropTypes.func.isRequired,
-  handlePasswordChange: PropTypes.func.isRequired
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    const credentials = {
+      username, password
+    }
+    dispatch(login(credentials))
+    setUsername('')
+    setPassword('')
+  }
+
+  return(
+    <form onSubmit={handleLogin}>
+      <div>
+        username
+        <input
+          id='username'
+          type='text'
+          value={username}
+          name='Username'
+          onChange={({ target }) => setUsername(target.value)}
+        />
+      </div>
+      <div>
+        password
+        <input
+          id='password'
+          type='password'
+          value={password}
+          name='Password'
+          onChange={({ target }) => setPassword(target.value)}
+        />
+      </div>
+      <button id='login-button' type='submit'>login</button>
+    </form>
+  )
 }
+
+
 
 export default LoginForm

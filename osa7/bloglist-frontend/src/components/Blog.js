@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { likeBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
-const Blog = ({ user, blog, handleLikes, handleRemove }) => {
+const Blog = ({ user, blog, handleRemove }) => {
   const [showInfo, setShow] = useState(false)
 
   const ExpandStatus = { display: showInfo ? '' : 'none' }
@@ -17,6 +20,18 @@ const Blog = ({ user, blog, handleLikes, handleRemove }) => {
     borderWidth: 1,
     marginBottom: 5
   }
+
+  //TODO:add user to returned blog somehow, fix message
+  const dispatch = useDispatch()
+  const handleLikes = (event) => {
+    event.preventDefault()
+    const id = event.target.value
+    dispatch(likeBlog(id))
+    const msg = 'Voted'
+    dispatch(setNotification({ msg:msg, color:'green' }, 5))
+  }
+
+
 
   const ExpandButton = () => (
     <button className='expandButton' onClick={() => setShow(!showInfo)}>
@@ -42,7 +57,7 @@ const Blog = ({ user, blog, handleLikes, handleRemove }) => {
 Blog.propTypes = {
   user: PropTypes.object.isRequired,
   blog: PropTypes.object.isRequired,
-  handleLikes: PropTypes.func.isRequired,
+  //handleLikes: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
 }
 
