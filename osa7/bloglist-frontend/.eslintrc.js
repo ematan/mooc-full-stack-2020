@@ -30,7 +30,8 @@ module.exports = {
   'rules': {
     'indent': [
       'error',
-      2
+      2,
+      { "SwitchCase": 1 }
     ],
     'linebreak-style': [
       'error',
@@ -53,6 +54,8 @@ module.exports = {
       'error', { 'before': true, 'after': true }
     ],
     'no-console': 0,
-    'react/proptypes': 0
+    'react/proptypes': 0,
+    "no-unused-vars": [
+      "error", { "ignoreRestSiblings": true }]
   }
 }
