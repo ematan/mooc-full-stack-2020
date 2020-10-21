@@ -53,6 +53,9 @@ export const likeBlog = id => {
       const { blogs, ...user } = await userService.getOne(changedBlog.user)
       changedBlog.user = user
 
+      const msg = `Voted ${changedBlog.title}`
+      dispatch(setNotification({ msg:msg, color:'green' }, 5))
+
       dispatch({
         type: 'LIKE_BLOG',
         data: changedBlog

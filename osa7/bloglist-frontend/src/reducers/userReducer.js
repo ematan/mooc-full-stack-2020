@@ -1,67 +1,22 @@
-import loginService from '../services/login'
-import blogService from '../services/blogs'
-
-import { setNotification } from './notificationReducer'
-
-const LOCAL_STORAGE_KEY = 'loggedBlogappUser'
+import userService from '../services/users'
 
 const reducer = (state = null, action) => {
   switch (action.type) {
-    case 'LOGIN':
-      return action.data
-    case 'LOGOUT':
-      return null
+    case 'INIT_USERS':
+      return action.data.users
     default:
       return state
   }
 }
 
-const storeToken = (user) => {
-  window.localStorage.setItem(
-    LOCAL_STORAGE_KEY, JSON.stringify(user)
-  )
-  blogService.setToken(user.token)
-}
-
-export const login = (creds) => {
+export const initializeUsers = () => {
   return async dispatch => {
-    try {
-      const user = await loginService.login(creds)
-      dispatch({
-        type: 'LOGIN',
-        data: user
-      })
-      storeToken(user)
-      dispatch(setNotification({ msg: `Hi ${user.name}`, color:'green' },5))
-
-    } catch (e) {
-      let msg = 'Something went wrong'
-      if (e.response.status === 401){
-        msg = 'Wrong username or password'
-      }
-      dispatch(setNotification({ msg: msg, color:'red' },5))
-    }
+    const users = await userService.getAll()
+    dispatch({
+      type: 'INIT_USERS',
+      data: { users }
+    })
   }
 }
-
-export const checkTokenForLogin = () => {
-  return async dispatch => {
-    const loggedUserJSON = window.localStorage.getItem(LOCAL_STORAGE_KEY)
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      storeToken(user)
-      dispatch({
-        type: 'LOGIN',
-        data: user
-      })
-    }
-  }
-}
-
-export const logout = () => {
-  window.localStorage.removeItem(LOCAL_STORAGE_KEY)
-  return { type:'LOGOUT' }
-}
-
 
 export default reducer
