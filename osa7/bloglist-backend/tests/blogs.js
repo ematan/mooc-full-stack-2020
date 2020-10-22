@@ -69,7 +69,21 @@ const newBlog_noUrl = {
   likes: 3
 }
 
+const comment = {
+  content: 'this is a comment'
+}
+
+const comment2 = {
+  content: 'this is a second comment'
+}
+
 
 module.exports = {
-  initialBlogs, newBlog, newBlog_noLikes, newBlog_noTitle, newBlog_noUrl
+  initialBlogs,
+  newBlog,
+  newBlog_noLikes,
+  newBlog_noTitle,
+  newBlog_noUrl,
+  comment,
+  comment2
 }
