@@ -32,14 +32,14 @@ export const login = (creds) => {
         data: user
       })
       storeToken(user)
-      dispatch(setNotification({ msg: `Hi ${user.name}`, color:'green' },5))
+      dispatch(setNotification({ msg: `Hi ${user.name}`, color:'success' },5))
 
     } catch (e) {
       let msg = 'Something went wrong'
       if (e.response.status === 401){
         msg = 'Wrong username or password'
       }
-      dispatch(setNotification({ msg: msg, color:'red' },5))
+      dispatch(setNotification({ msg: msg, color:'danger' },5))
     }
   }
 }

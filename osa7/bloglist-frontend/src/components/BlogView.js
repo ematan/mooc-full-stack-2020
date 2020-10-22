@@ -3,9 +3,14 @@ import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import { addComment } from '../reducers/blogReducer'
 
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Card from 'react-bootstrap/Card'
+
 const Comment = ({ comment }) => {
   return(
-    <li>{comment.content}</li>
+    <ListGroup.Item>{comment.content}</ListGroup.Item>
   )
 }
 Comment.propTypes = {
@@ -31,19 +36,19 @@ const CommentForm = ({ blogId }) => {
   }
 
   return(
-    <form onSubmit={handleAddComment}>
-      <div>
-        comment:
-        <input
+    <Form onSubmit={handleAddComment}>
+      <Form.Group>
+        <Form.Label>Add a comment:</Form.Label>
+        <Form.Control
           id="comment"
           type='text'
           value={comment}
           name='Comment'
           onChange={handleCommentChange}
         />
-      </div>
-      <button id='createcomment-button' type='submit'>create</button>
-    </form>
+      </Form.Group>
+      <Button variant="outline-dark" id='createcomment-button' type='submit'>create</Button>
+    </Form>
   )
 }
 CommentForm.propTypes = {
@@ -57,21 +62,25 @@ const BlogView = ({ blog, user, handleRemove, handleLikes }) => {
 
   return (
     <div>
-      <h2>{blog.title}</h2>
-      <a href={blog.url}>{blog.url}</a><br />
-      {blog.likes} likes <button className='likeButton' value={blog.id} onClick={handleLikes}>like</button><br/>
-      added by {blog.user.name} <br/>
-      {userIsCreator && <button value={blog.id} onClick={handleRemove}>remove</button>} <br />
+      <Card body>
+        <h2>{blog.title}</h2>
+        <a href={blog.url}>{blog.url}</a><br />
+        <b>{blog.likes}</b> likes <Button variant="outline-dark" className='likeButton' value={blog.id} onClick={handleLikes}>like</Button><br/>
+        added by {blog.user.name} <br/>
+        {userIsCreator && <button value={blog.id} onClick={handleRemove}>remove</button>} <br />
+      </Card>
       <h2>comments</h2>
       {blog.comments && blog.comments[0]
-        ? <ul>
+        ? <ListGroup variant="flush">
           {blog.comments.map(c =>
             <Comment key={c.id} comment={c} />
           )}
-        </ul>
+        </ListGroup>
         : <p>No comments for this blog yet</p>
       }
-      <CommentForm blogId={blog.id}/>
+      <Card body>
+        <CommentForm blogId={blog.id}/>
+      </Card>
     </div>
   )
 }

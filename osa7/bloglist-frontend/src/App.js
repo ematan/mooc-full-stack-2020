@@ -17,9 +17,13 @@ import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUsers } from './reducers/userReducer'
 import { logout, checkTokenForLogin } from './reducers/loginReducer'
 
-import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
 
 import './App.css'
+import Container from 'react-bootstrap/Container'
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
+import Button from 'react-bootstrap/Button'
 
 
 const App = () => {
@@ -46,12 +50,8 @@ const App = () => {
   }
 
   const LogOutButton = () => (
-    <button onClick={handleLogout}>logout</button>
+    <Button variant="outline-light" onClick={handleLogout}>logout</Button>
   )
-
-  const padding = {
-    padding: 5
-  }
 
   const handleLikes = (event) => {
     event.preventDefault()
@@ -81,43 +81,60 @@ const App = () => {
 
   return (
     <div>
-      <div>
-        <Link style={padding} to="/">blogs</Link>
-        <Link style={padding} to="/users">users</Link>
-        {user ? <div style={padding}>{user.name} logged in <LogOutButton /></div> : null }
-      </div>
+      <header>
+        <Navbar bg='dark' variant='dark'>
+          <Navbar.Brand>Blog app</Navbar.Brand>
+          <Nav className="mr-auto">
+            <Nav.Item>
+              <Nav.Link href="/">blogs</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link href="/users">users</Nav.Link>
+            </Nav.Item>
+          </Nav>
+          <Navbar.Text>
+            {user
+              ? <span className='navbar-text'>{user.name} logged in <LogOutButton /></span>
+              : null
+            }
+          </Navbar.Text>
+        </Navbar>
+      </header>
 
-      <Notification />
-      {!user ?
-        <div>
-          <LoginForm />
-        </div>
-        :
-        <div>
-          <h2>Blogapp</h2>
-          <Switch>
-            <Route path='/users/:id'>
-              <User user={routedUser} />
-            </Route>
-            <Route path='/users'>
-              <UserList />
-            </Route>
+      <Container fluid>
+        <Notification />
+      </Container>
+      <Container >
+        {!user ?
+          <div>
+            <LoginForm />
+          </div>
+          :
+          <div>
+            <Switch>
+              <Route path='/users/:id'>
+                <User user={routedUser} />
+              </Route>
+              <Route path='/users'>
+                <UserList />
+              </Route>
 
-            <Route path='/blogs/:id'>
-              <BlogView blog={routedBlog} user={user} handleLikes={handleLikes} handleRemove={handleRemove} />
-            </Route>
+              <Route path='/blogs/:id'>
+                <BlogView blog={routedBlog} user={user} handleLikes={handleLikes} handleRemove={handleRemove} />
+              </Route>
 
-            <Route path='/'>
-              <Togglable buttonLabel="new blog">
-                <CreateForm />
-              </Togglable>
-              <BlogList />
-            </Route>
-          </Switch>
+              <Route path='/'>
+                <Togglable buttonLabel="new blog">
+                  <CreateForm />
+                </Togglable>
+                <BlogList />
+              </Route>
+            </Switch>
 
 
-        </div>
-      }
+          </div>
+        }
+      </Container>
 
     </div>
   )

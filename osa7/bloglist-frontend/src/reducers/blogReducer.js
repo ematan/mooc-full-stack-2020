@@ -47,7 +47,7 @@ export const createBlog = (blog) => {
       })
     } catch (e) {
       const msg = e.response.data.error
-      dispatch(setNotification({ msg:msg, color:'red' }, 5))
+      dispatch(setNotification({ msg:msg, color:'danger' }, 5))
     }
   }
 }
@@ -64,7 +64,7 @@ export const likeBlog = id => {
       changedBlog.user = user
 
       const msg = `Voted ${changedBlog.title}`
-      dispatch(setNotification({ msg:msg, color:'green' }, 5))
+      dispatch(setNotification({ msg:msg, color:'success' }, 5))
 
       dispatch({
         type: 'LIKE_BLOG',
@@ -96,7 +96,7 @@ export const deleteBlog = id => {
       const blog = await blogService.getOne(id)
       await blogService.remove(id)
       const msg = `${blog.title} succesfully removed`
-      dispatch(setNotification({ msg:msg, color:'green' }, 5))
+      dispatch(setNotification({ msg:msg, color:'success' }, 5))
       dispatch({
         type: 'DELETE_BLOG',
         data: blog
@@ -104,7 +104,7 @@ export const deleteBlog = id => {
 
     } catch (e) {
       console.log(e)
-      dispatch(setNotification({ msg:e.response.data.error, color:'red' }, 5))
+      dispatch(setNotification({ msg:e.response.data.error, color:'danger' }, 5))
     }
   }
 
