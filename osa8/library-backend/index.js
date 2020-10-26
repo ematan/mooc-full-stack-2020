@@ -112,7 +112,7 @@ const typeDefs = gql`
       title: String!
       published: Int!
       author: String!
-      genres: [String!]
+      genres: [String!]!
     ): Book
 
     editAuthor(
@@ -177,8 +177,8 @@ const server = new ApolloServer({
   resolvers,
 })
 
-// changed port to 3000
+// changed port to 3001
 
-server.listen({ port: 3000 }).then(({ url }) => {
+server.listen({ port: 3001 }).then(({ url }) => {
   console.log(`Server ready at ${url}`)
 })
