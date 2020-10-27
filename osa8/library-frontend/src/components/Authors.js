@@ -8,10 +8,10 @@ import { ALL_AUTHORS } from '../queries'
 import EditAuthor from './EditAuthor'
 
 
-const Authors = (props) => {
+const Authors = ({ token, show }) => {
   const result = useQuery(ALL_AUTHORS)
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
   if (result.loading) return <div>loading...</div>
@@ -42,14 +42,15 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-
-      <EditAuthor options={authors}/>
-
+      {token &&
+        <EditAuthor options={authors}/>
+      }
     </div>
   )
 }
 Authors.propTypes = {
   show: PropTypes.bool,
+  token: PropTypes.string
 }
 
 export default Authors

@@ -29,7 +29,7 @@ const NewBook = (props) => {
     console.log('add book...')
 
     const publishedInt = Number(published)
-    const a = createBook({ variables: { title, author, published: publishedInt, genres } })
+    const a = await createBook({ variables: { title, author, published: publishedInt, genres } })
     console.log(a)
     setTitle('')
     setPublished('')
