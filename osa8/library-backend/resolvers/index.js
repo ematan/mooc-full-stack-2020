@@ -44,20 +44,23 @@ const resolvers = {
       if (!currentUser) {
         throw new AuthenticationError('not authenticated')
       }
-      let book
+
       try {
         let author = await Author.findOne({ name: args.author })
         if (author) {
-          book = new Book({ ...args, author })
+          const book = new Book({ ...args, author })
           return await book.save()
         }
         //
-        author = await new Author({ name: args.author }).validate()
+        author = await new Author({ name: args.author })
+        await author.validate()
 
-        book = await new Book({ ...args, author })
-        await book.save()
-        // save author only if book was saved succesfully
+        const book = await new Book({ ...args, author })
+        await book.validate()
+
+        // save only if both are validated
         await author.save()
+        return await book.save()
 
       } catch (e) {
 
@@ -65,7 +68,7 @@ const resolvers = {
           invalidArgs: args,
         })
       }
-      return book
+
     },
     editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser
@@ -85,7 +88,7 @@ const resolvers = {
       }
     },
     createUser: async (root, args) => {
-      const user = new User({ username: args.username })
+      const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre })
       try {
         return await user.save()
       } catch(e) {
