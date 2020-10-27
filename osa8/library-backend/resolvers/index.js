@@ -2,7 +2,7 @@ require('dotenv').config()
 const Book = require('../models/books')
 const Author = require('../models/authors')
 const User = require('../models/user')
-const { UserInputError } = require('apollo-server')
+const { UserInputError, AuthenticationError } = require('apollo-server')
 
 
 const jwt = require('jsonwebtoken')
@@ -39,7 +39,11 @@ const resolvers = {
     }
   },
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if (!currentUser) {
+        throw new AuthenticationError('not authenticated')
+      }
       let book
       try {
         let author = await Author.findOne({ name: args.author })
@@ -63,7 +67,11 @@ const resolvers = {
       }
       return book
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if (!currentUser) {
+        throw new AuthenticationError('not authenticated')
+      }
       const author = await Author.findOne({ name: args.name })
       if (!author) return null
 
