@@ -15,6 +15,7 @@ module.exports = {
       'version': 'detect'
     }
   },
+  "parser": "babel-eslint",
   'parserOptions': {
     'ecmaFeatures': {
       'jsx': true

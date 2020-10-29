@@ -11,7 +11,7 @@ const Recommend = ({ show } ) => {
 
   const [ getBooks, { loading, error, data } ] = useLazyQuery(ALL_BOOKS)
 
-  const favoriteGenre = dataMe ? dataMe.me.favoriteGenre : null
+  const favoriteGenre = dataMe?.me?.favoriteGenre
 
   useEffect(() => {
     getBooks({ variables: { genre: favoriteGenre } })
