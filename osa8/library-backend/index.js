@@ -1,8 +1,7 @@
 const { ApolloServer } = require('apollo-server')
-//const { v1: uuid } = require('uuid')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
-
+const loaders = require('./loaders')
 const { typeDefs } = require('./typeDefs')
 const { resolvers } = require('./resolvers')
 const { MONGODB_URI } = require('./utils/config')
@@ -33,7 +32,13 @@ const server = new ApolloServer({
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
       const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET)
       const currentUser = await User.findById(decodedToken.id)
-      return { currentUser }
+      return {
+        currentUser,
+        loaders
+      }
+    }
+    return {
+      loaders
     }
   }
 })

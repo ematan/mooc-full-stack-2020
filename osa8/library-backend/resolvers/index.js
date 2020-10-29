@@ -34,9 +34,8 @@ const resolvers = {
     allAuthors: () => Author.find({}),
   },
   Author: {
-    bookCount: async (root) => {
-      const books = await Book.find({ author: root })
-      return books.length
+    bookCount: ({ id }, args, { loaders }) => {
+      return loaders.customLoader.load(id.toString())
     }
   },
   Mutation: {
