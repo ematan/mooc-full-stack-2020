@@ -40,6 +40,7 @@ const server = new ApolloServer({
 
 // changed port to 3001
 
-server.listen({ port: config.PORT }).then(({ url }) => {
+server.listen({ port: config.PORT }).then(({ url, subscriptionsUrl }) => {
   console.log(`Server ready at ${url}`)
+  console.log(`Subscriptions ready at ${subscriptionsUrl}`)
 })

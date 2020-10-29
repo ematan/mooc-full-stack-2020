@@ -4,6 +4,8 @@ const Author = require('../models/authors')
 const User = require('../models/user')
 const { UserInputError, AuthenticationError } = require('apollo-server')
 
+const { PubSub } = require('apollo-server')
+const pubsub = new PubSub()
 
 const jwt = require('jsonwebtoken')
 const JWT_SECRET = process.env.SECRET
@@ -17,7 +19,6 @@ const resolvers = {
     authorCount: () => Author.collection.countDocuments(),
     allBooks: async (root, args ) => {
       let filters = []
-
       if (args.author) {
         const author = await Author.findOne({ name: args.author })
         filters = filters.concat({ author: author })
@@ -47,23 +48,23 @@ const resolvers = {
 
       try {
         let author = await Author.findOne({ name: args.author })
-        if (author) {
-          const book = new Book({ ...args, author })
-          return await book.save()
+        if (!author) {
+          author = await new Author({ name: args.author })
+          await author.validate()
         }
-        //
-        author = await new Author({ name: args.author })
-        await author.validate()
 
         const book = await new Book({ ...args, author })
         await book.validate()
 
         // save only if both are validated
         await author.save()
-        return await book.save()
+        await book.save()
+
+        pubsub.publish('BOOK_ADDED', { bookAdded: book })
+        return book
 
       } catch (e) {
-
+        console.log(e)
         throw new UserInputError(e.message, {
           invalidArgs: args,
         })
@@ -110,6 +111,11 @@ const resolvers = {
 
       return { value: jwt.sign(userForToken, JWT_SECRET) }
     }
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
+    },
   }
 }
 

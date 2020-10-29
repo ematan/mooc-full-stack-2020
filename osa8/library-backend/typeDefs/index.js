@@ -58,6 +58,10 @@ const typeDefs = gql`
     ): Token
   }
 
+  type Subscription {
+    bookAdded: Book!
+  }
+
 `
 
 module.exports = {

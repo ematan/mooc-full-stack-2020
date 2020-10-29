@@ -41,9 +41,12 @@ mutation createBook(
       title,
       author {
         name
+        born
+        bookCount
       },
-      published,
+      published
       genres
+      id
     }
 }
 `
@@ -77,6 +80,22 @@ export const ME = gql`
     me {
       username,
       favoriteGenre
+    }
+  }
+`
+
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      title
+      author {
+        name
+        born
+        bookCount
+      }
+      published
+      genres
+      id
     }
   }
 `
