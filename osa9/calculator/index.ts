@@ -1,25 +1,17 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-
-const app = express();
-app.use(bodyParser.json());
-
-
-
-
 import { calculateBmi } from './bmiCalculator';
 import {calculateExercises} from './exerciseCalculator';
 
-
+const app = express();
+app.use(bodyParser.json());
 
 app.get('/hello', (_req, res) => {
   res.send('Hello Full Stack!');
 });
 
 
-
-//http://localhost:3001/bmi?height=180&weight=72
-
+//example http://localhost:3001/bmi?height=180&weight=72
 app.get('/bmi', (req, res) => {
   const h = Number(req.query.height);
   const w = Number(req.query.weight);
@@ -37,8 +29,6 @@ app.get('/bmi', (req, res) => {
 
   res.send(result);
 });
-
-//http://localhost:3001/bmi?height=180&weight=72
 
 
 type RequestBody = {
@@ -68,21 +58,7 @@ app.post('/exercise', (req, res) => {
 
 
 
-
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
