@@ -1,16 +1,10 @@
 import React from "react";
-import { PartType } from '../types'
+import { CoursePart } from '../types';
 
-interface PartProps {
-  part: PartType;
-}
-
-const Part: React.FC<PartProps> = ({part}) => (
-  <p>{part.name} {part.exerciseCount}</p>
-)
+import Part from './Part';
 
 interface ContentProps {
-  content: PartType[];
+  content: CoursePart[];
 }
 
 const Content: React.FC<ContentProps> = ({content}) => (
@@ -18,6 +12,7 @@ const Content: React.FC<ContentProps> = ({content}) => (
     <Part part={content[0]} />
     <Part part={content[1]} />
     <Part part={content[2]} />
+    <Part part={content[3]} />
   </div>
 )
 
