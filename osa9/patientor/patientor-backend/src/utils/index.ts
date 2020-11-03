@@ -50,6 +50,21 @@ const parseOccupation = (occupation: any): string => {
   return occupation;
 };
 
+/*const isEntry = (entry: any): entry is Entry => {
+  return (entry instanceof Entry);
+};
+
+const parseEntries = (entries: any): Entry[] => {
+  if (!entries || !Array.isArray(entries)) {
+    throw new Error('Entries missing');
+  }
+  const isValid = entries.every(e => isEntry(e));
+  if (!entries || !isValid) {
+    throw new Error('Entries missing');
+  }
+  return entries;
+}*/
+
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const toNewPatientEntry = (object: any): newPatientEntry => {
@@ -59,6 +74,7 @@ const toNewPatientEntry = (object: any): newPatientEntry => {
     dateOfBirth: parseDOB(object.dateOfBirth),
     ssn: parseSSN(object.ssn),
     occupation: parseOccupation(object.occupation),
+    entries: []
   };
   return newPatient;
 };
