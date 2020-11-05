@@ -4,9 +4,10 @@ import { useParams } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react'
 
 import { apiBaseUrl } from '../constants';
-import { Patient, Gender, Entry, Diagnosis } from '../types';
+import { Patient, Gender, Diagnosis } from '../types';
 import { setFetchedPatient, setDiagnoses } from "../state";
 import { useStateValue } from '../state';
+import EntryDetails from '../components/Entry';
 
 const GenderIcon: React.FC<{gender: Gender}> = ({gender}) => {
   switch (gender){
@@ -17,27 +18,7 @@ const GenderIcon: React.FC<{gender: Gender}> = ({gender}) => {
   }
 }
 
-type EntryProps = {
-  entry: Entry,
-  diagnoses: {[code: string]: Diagnosis}
-};
 
-const EntryRow: React.FC<EntryProps> = ({entry, diagnoses}) => {
-  console.log('this', diagnoses)
-
-  const diagnosis = entry.diagnosisCodes?.map(d => {
-    const diagnosisData = diagnoses[d];
-    return <li key={d}><span>{diagnosisData.code} {diagnosisData.name}
-          {diagnosisData.latin ? <p>(<i>{diagnosisData.latin}</i>)</p> : null} </span></li>
-  });
-
-  return (
-    <div>
-      {entry.date} {entry.description} <br />
-      <ul>{diagnosis}</ul>
-    </div>
-  )
-}
 
 const PatientPage: React.FC = () => {
 
@@ -96,7 +77,7 @@ const PatientPage: React.FC = () => {
         <h3>entries</h3>
 
         {patient.entries.map(e =>
-          <EntryRow key={e.id} entry={e} diagnoses={diagnoses}/>
+          <EntryDetails key={e.id} entry={e} diagnoses={diagnoses}/>
         )}
 
       </div>
