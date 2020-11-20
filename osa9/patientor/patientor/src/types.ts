@@ -46,7 +46,7 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
   sickLeave?: {
     startDate: string;
     endDate: string;
-  }
+  };
 }
 
 export interface HospitalEntry extends BaseEntry {
@@ -54,7 +54,7 @@ export interface HospitalEntry extends BaseEntry {
   discharge: {
     date: string;
     criteria: string;
-  }
+  };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -62,3 +62,12 @@ export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
+
+
+export type newHospitalEntry = Omit<HospitalEntry, 'id'>;
+export type newOccupationalHealthcareEntry = Omit<OccupationalHealthcareEntry, 'id'>;
+export type newHealthCheckEntry = Omit<HealthCheckEntry, 'id'>;
+export type newEntry =
+  | newHospitalEntry
+  | newOccupationalHealthcareEntry
+  | newHealthCheckEntry;
