@@ -24,6 +24,16 @@ patientsRouter.get('/:id', (req, res) => {
   }
 });
 
+patientsRouter.post('/:id/entries', (req, res) => {
+  try {
+    const id = req.params.id;
+    const entry = patientService.postEntry(req.body, id);
+    return res.send(entry);
+  } catch (error) {
+    return res.status(404).send({error: 'we have an error'});
+  }
+});
+
 patientsRouter.post('/', (req, res) => {
   try {
     const patient =  req.body as newPatientEntry;

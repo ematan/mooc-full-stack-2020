@@ -8,6 +8,8 @@ import {  newPatientEntry,
           OccupationalHealthcareEntry,
           HealthCheckEntry,
           BaseEntry,
+          newEntry,
+          DiagnoseEntry
        } from '../types';
 
 const isString = (text: any): text is string => {
@@ -57,6 +59,13 @@ const parseOccupation = (occupation: any): string => {
   return occupation;
 };
 
+const parseDiagnosis = (diagnosisCodes: any): diagnosisCodes is Array<DiagnoseEntry['code']> => {
+  //console.log('hep');
+  if (!diagnosisCodes || !Array.isArray(diagnosisCodes)) {
+    throw new Error('Not an array');
+  }
+  return diagnosisCodes.every((d: any) => isString(d));
+};
 
 const isBaseEntry = (entry: any): entry is BaseEntry => {
   if (
@@ -65,8 +74,24 @@ const isBaseEntry = (entry: any): entry is BaseEntry => {
     entry.date && isDate(entry.date) &&
     entry.specialist && isString(entry.specialist)
   ) {
+    //console.log('base ok');
     if (entry.diagnosisCodes){
-      return isString(entry.diagnosisCodes);
+      //console.log('codes');
+      return parseDiagnosis(entry.diagnosisCodes);
+    }
+    return true;
+  }
+  return false;
+};
+
+const isNewBaseEntry = (entry: any): entry is BaseEntry => {
+  if (
+    entry.description && isString(entry.description) &&
+    entry.date && isDate(entry.date) &&
+    entry.specialist && isString(entry.specialist)
+  ) {
+    if (entry.diagnosisCodes){
+      return parseDiagnosis(entry.diagnosisCodes);
     }
     return true;
   }
@@ -111,7 +136,8 @@ const isHealthCheckEntry = (entry: any): entry is HealthCheckEntry => {
 
 
 const isEntry = (entry: any): entry is Entry => {
-  if (!isBaseEntry) throw new Error('not even a base entry :(');
+  //console.log(entry);
+  if (!isBaseEntry(entry)) throw new Error('not even a base entry :(');
   return (
     isHospitalEntry(entry) ||
     isOccupationalHealthcareEntry(entry) ||
@@ -124,7 +150,7 @@ const parseEntries = (entries: any): Entry[] => {
     throw new Error('Entries missing');
   }
   return entries.map(e => {
-    console.log(e);
+    //console.log(e);
     if (!isEntry(e)){
       throw new Error('Not an entry');
     } else {
@@ -147,4 +173,15 @@ const toNewPatientEntry = (object: any): newPatientEntry => {
   return newPatient;
 };
 
-export default toNewPatientEntry;
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+const toNewEntry = (object:any): newEntry => {
+  if (!isNewBaseEntry(object)){
+    throw new Error(`Not base entry ${object}`);
+  }
+  if (isHospitalEntry(object)) return object;
+  if (isOccupationalHealthcareEntry(object)) return object;
+  if (isHealthCheckEntry(object)) return object;
+  throw new Error(`Not an entry of a recognized type.`);
+};
+
+export default { toNewPatientEntry, toNewEntry };
