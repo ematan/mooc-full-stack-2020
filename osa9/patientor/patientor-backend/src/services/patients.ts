@@ -26,12 +26,12 @@ const postPatient = (newPatient: newPatientEntry): Patient => {
 const postEntry = (newEntry: newEntry, patientID: string):Entry => {
   const id = uuid();
   const entry: newEntry = utils.toNewEntry(newEntry);
-  const withId: Entry  = { id, ...entry };
+  const withId: Entry  = { ...entry, id };
   patients.forEach((p) => {
     if (p.id === patientID) {
       p.entries.push(withId);
     }
-    return p;
+    //return p;
   });
   return withId;
 };

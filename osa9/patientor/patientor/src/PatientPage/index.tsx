@@ -83,9 +83,6 @@ const PatientPage: React.FC = () => {
 
   if(!patient || Object.entries(diagnoses).length === 0) return <div>Loading</div>;
 
-
-  console.log(error);
-
   return(
     <div className="App">
       <span>

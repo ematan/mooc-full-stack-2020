@@ -1,48 +1,89 @@
 import React from 'react';
-import { newEntry } from '../types';
+import { newEntry, newOccupationalHealthcareEntry, newHospitalEntry } from '../types';
 import { Field, Formik, Form } from "formik";
-import { TextField, NumberField, DiagnosisSelection } from "../AddPatientModal/FormField";
+import { TextField, DiagnosisSelection } from "../AddPatientModal/FormField";
 import { useStateValue } from '../state';
 import { Grid, Button } from "semantic-ui-react";
+
+import { initialValuesHealthCheck, HealthCheckFields } from './HealthCheck';
+import { initialValuesOccupational, OccupationalFields, validateOccupational } from './Occupational';
+import { initialValuesHospital, HospitalFields, validateHospital } from './Hospital';
 
 interface Props {
   onSubmit: (values: newEntry) => void;
   onCancel: () => void;
+  type: string;
 }
 
-const EntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
+const EntryForm: React.FC<Props> = ({ onSubmit, onCancel, type }) => {
   const [{diagnoses}] = useStateValue();
+
+  const validateBase = (values: newEntry) => {
+    const requiredError = "Field is required";
+    const dateError = "Date needs to be in valid format";
+    const errors: { [field: string]: string } = {};
+    if (!values.date) {
+      errors.date = requiredError;
+    }
+    if (!(Date.parse(values.date))) {
+      errors.date = dateError;
+    }
+    if (!values.description) {
+      errors.description = requiredError;
+    }
+    if (!values.specialist) {
+      errors.specialist = requiredError;
+    }
+    return errors;
+  };
+
+  const initialValuesBase = {
+    date: "",
+    description: "",
+    specialist: "",
+  };
+
+  const initialValues = (type: string) => {
+
+    if (type === 'HealthCheckEntry') {
+      return {...initialValuesHealthCheck, ...initialValuesBase
+      } as newEntry;
+    }
+    if (type === 'HospitalEntry'){
+      return { ...initialValuesHospital, ...initialValuesBase
+      } as newHospitalEntry;
+    }
+    if (type === 'OccupationalHealthcareEntry'){
+      return { ...initialValuesOccupational, ...initialValuesBase
+      } as newOccupationalHealthcareEntry;
+    }
+    throw new Error('oops');
+  };
+
+  console.log(initialValues(type));
+
   return (
     <Formik
-      initialValues={{
-        date: "",
-        description: "",
-        specialist: "",
-        healthCheckRating: 0,
-        type: 'HealthCheck'
-      }}
+      enableReinitialize
+      initialValues={initialValues(type)}
       onSubmit={onSubmit}
       validate={(values: newEntry) => {
-        const requiredError = "Field is required";
-        const dateError = "Date needs to be in valid format";
-        const errors: { [field: string]: string } = {};
-        console.log(Date.parse(values.date));
-        if (!values.date) {
-          errors.date = requiredError;
+
+        if (type === 'OccupationalHealthcareEntry'){
+          return {
+            ...validateOccupational(values as newOccupationalHealthcareEntry),
+            ...validateBase(values)};
         }
-        if (!(Date.parse(values.date))) {
-          errors.date = dateError;
+        if (type === 'HospitalEntry'){
+          return {
+            ...validateHospital(values as newHospitalEntry),
+            ...validateBase(values)};
         }
-        if (!values.description) {
-          errors.description = requiredError;
-        }
-        if (!values.specialist) {
-          errors.specialist = requiredError;
-        }
-        return errors;
+        return validateBase(values);
       }}
     >
       {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
+        console.log(isValid)
         return (
           <Form className='form ui'>
             <Field
@@ -63,13 +104,16 @@ const EntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               name='specialist'
               component={TextField}
             />
-            <Field
-              label='HealthCheckRating'
-              name='healthCheckRating'
-              component={NumberField}
-              max={3}
-              min={0}
-            />
+            {type === 'HealthCheckEntry'
+              ? HealthCheckFields
+              : null }
+            {type === 'OccupationalHealthcareEntry'
+              ? OccupationalFields
+              : null }
+            {type === 'HospitalEntry'
+              ? HospitalFields
+              : null }
+
             <DiagnosisSelection
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
