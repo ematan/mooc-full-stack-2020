@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { Icon, Button } from 'semantic-ui-react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { Icon, Button } from "semantic-ui-react";
 
-import { apiBaseUrl } from '../constants';
-import { Patient, Gender, Diagnosis, Entry, newEntry } from '../types';
+import { apiBaseUrl } from "../constants";
+import { Patient, Gender, Diagnosis, Entry, newEntry } from "../types";
 import { setFetchedPatient, setDiagnoses } from "../state";
-import { useStateValue, addEntry } from '../state';
-import EntryDetails from '../components/Entry';
+import { useStateValue, addEntry } from "../state";
+import EntryDetails from "../components/Entry";
 
-import AddEntryModal from '../AddEntryModal';
+import AddEntryModal from "../AddEntryModal";
 
 const GenderIcon: React.FC<{gender: Gender}> = ({gender}) => {
   switch (gender){
-    case 'female': return <Icon name='venus' />;
-    case 'male': return <Icon name='mars' />;
-    case 'other': return <Icon name='genderless' />;
+    case "female": return <Icon name="venus" />;
+    case "male": return <Icon name="mars" />;
+    case "other": return <Icon name="genderless" />;
     default: return null;
   }
 };

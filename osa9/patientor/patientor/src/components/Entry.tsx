@@ -1,6 +1,6 @@
-import React from 'react';
-import { Entry, Diagnosis, HealthCheckEntry, OccupationalHealthcareEntry, HospitalEntry } from '../types';
-import { Segment, Icon, Rating } from 'semantic-ui-react'
+import React from "react";
+import { Entry, Diagnosis, HealthCheckEntry, OccupationalHealthcareEntry, HospitalEntry } from "../types";
+import { Segment, Icon, Rating } from "semantic-ui-react";
 
 const assertNever = (value: never): never => {
   throw new Error(
@@ -18,8 +18,8 @@ const HealthCheckEntryDetails: React.FC<{entry: HealthCheckEntry}> = ({entry}) =
       </p>
       <Rating icon="heart" disabled rating={4 - rating} maxRating={4} />
     </Segment>
-  )
-}
+  );
+};
 
 const OccupationalHealthcareEntryDetails: React.FC<{entry: OccupationalHealthcareEntry}> = ({entry}) => {
   return(
@@ -29,8 +29,8 @@ const OccupationalHealthcareEntryDetails: React.FC<{entry: OccupationalHealthcar
         {entry.description}
       </p>
     </Segment>
-  )
-}
+  );
+};
 
 const HospitalEntryDetails: React.FC<{entry: HospitalEntry}> = ({entry}) => {
   return(
@@ -41,28 +41,28 @@ const HospitalEntryDetails: React.FC<{entry: HospitalEntry}> = ({entry}) => {
       </p>
       <p>Discharge: {entry.discharge.date}</p>
     </Segment>
-  )
-}
+  );
+};
 
 
 
 
 type EntryProps = {
-  entry: Entry,
-  diagnoses: {[code: string]: Diagnosis}
+  entry: Entry;
+  diagnoses: {[code: string]: Diagnosis };
 };
 
-const EntryDetails: React.FC<EntryProps> = ({entry, diagnoses}) => {
+const EntryDetails: React.FC<EntryProps> = ({entry}) => {
   switch (entry.type) {
-    case 'HealthCheck':
-      return <HealthCheckEntryDetails entry={entry} />
-    case 'OccupationalHealthcare':
-      return <OccupationalHealthcareEntryDetails entry={entry} />
-    case 'Hospital':
-      return <HospitalEntryDetails entry={entry} />
+    case "HealthCheck":
+      return <HealthCheckEntryDetails entry={entry} />;
+    case "OccupationalHealthcare":
+      return <OccupationalHealthcareEntryDetails entry={entry} />;
+    case "Hospital":
+      return <HospitalEntryDetails entry={entry} />;
     default:
       return assertNever(entry);
   }
-}
+};
 
-export default EntryDetails
+export default EntryDetails;

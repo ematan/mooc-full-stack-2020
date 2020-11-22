@@ -1,13 +1,13 @@
-import React from 'react';
-import { newEntry, newOccupationalHealthcareEntry, newHospitalEntry } from '../types';
+import React from "react";
+import { newEntry, newOccupationalHealthcareEntry, newHospitalEntry } from "../types";
 import { Field, Formik, Form } from "formik";
 import { TextField, DiagnosisSelection } from "../AddPatientModal/FormField";
-import { useStateValue } from '../state';
+import { useStateValue } from "../state";
 import { Grid, Button } from "semantic-ui-react";
 
-import { initialValuesHealthCheck, HealthCheckFields } from './HealthCheck';
-import { initialValuesOccupational, OccupationalFields, validateOccupational } from './Occupational';
-import { initialValuesHospital, HospitalFields, validateHospital } from './Hospital';
+import { initialValuesHealthCheck, HealthCheckFields } from "./HealthCheck";
+import { initialValuesOccupational, OccupationalFields, validateOccupational } from "./Occupational";
+import { initialValuesHospital, HospitalFields, validateHospital } from "./Hospital";
 
 interface Props {
   onSubmit: (values: newEntry) => void;
@@ -45,19 +45,19 @@ const EntryForm: React.FC<Props> = ({ onSubmit, onCancel, type }) => {
 
   const initialValues = (type: string) => {
 
-    if (type === 'HealthCheckEntry') {
+    if (type === "HealthCheckEntry") {
       return {...initialValuesHealthCheck, ...initialValuesBase
       } as newEntry;
     }
-    if (type === 'HospitalEntry'){
+    if (type === "HospitalEntry"){
       return { ...initialValuesHospital, ...initialValuesBase
       } as newHospitalEntry;
     }
-    if (type === 'OccupationalHealthcareEntry'){
+    if (type === "OccupationalHealthcareEntry"){
       return { ...initialValuesOccupational, ...initialValuesBase
       } as newOccupationalHealthcareEntry;
     }
-    throw new Error('oops');
+    throw new Error("oops");
   };
 
   console.log(initialValues(type));
@@ -69,12 +69,12 @@ const EntryForm: React.FC<Props> = ({ onSubmit, onCancel, type }) => {
       onSubmit={onSubmit}
       validate={(values: newEntry) => {
 
-        if (type === 'OccupationalHealthcareEntry'){
+        if (type === "OccupationalHealthcareEntry"){
           return {
             ...validateOccupational(values as newOccupationalHealthcareEntry),
             ...validateBase(values)};
         }
-        if (type === 'HospitalEntry'){
+        if (type === "HospitalEntry"){
           return {
             ...validateHospital(values as newHospitalEntry),
             ...validateBase(values)};
@@ -83,34 +83,33 @@ const EntryForm: React.FC<Props> = ({ onSubmit, onCancel, type }) => {
       }}
     >
       {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
-        console.log(isValid)
         return (
-          <Form className='form ui'>
+          <Form className="form ui">
             <Field
-              label='Date'
-              placeholder='yyyy-mm-dd'
-              name='date'
+              label="Date"
+              placeholder="yyyy-mm-dd"
+              name="date"
               component={TextField}
             />
             <Field
-              label='Description'
-              placeholder='Description'
-              name='description'
+              label="Description"
+              placeholder="Description"
+              name="description"
               component={TextField}
             />
             <Field
-              label='Specialist'
-              placeholder='Specialist'
-              name='specialist'
+              label="Specialist"
+              placeholder="Specialist"
+              name="specialist"
               component={TextField}
             />
-            {type === 'HealthCheckEntry'
+            {type === "HealthCheckEntry"
               ? HealthCheckFields
               : null }
-            {type === 'OccupationalHealthcareEntry'
+            {type === "OccupationalHealthcareEntry"
               ? OccupationalFields
               : null }
-            {type === 'HospitalEntry'
+            {type === "HospitalEntry"
               ? HospitalFields
               : null }
 

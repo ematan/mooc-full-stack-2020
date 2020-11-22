@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 import { TextField } from "../AddPatientModal/FormField";
 import { Field } from "formik";
-import { newHospitalEntry } from '../types';
-import { Header } from 'semantic-ui-react';
+import { newHospitalEntry } from "../types";
+import { Header } from "semantic-ui-react";
 
 export const initialValuesHospital = {
-  type: 'Hospital',
+  type: "Hospital",
   discharge: {
-    date: '',
-    criteria: '',
+    date: "",
+    criteria: "",
   }
 };
 
@@ -16,15 +16,15 @@ export const HospitalFields = (
   <>
     <Header>Discharge</Header>
     <Field
-      label='Date'
-      name='discharge.date'
-      placeholder='YYYY-MM-DD'
+      label="Date"
+      name="discharge.date"
+      placeholder="YYYY-MM-DD"
       component={TextField}
     />
     <Field
-      label='Criteria'
-      name='discharge.criteria'
-      placeholder='Criteria'
+      label="Criteria"
+      name="discharge.criteria"
+      placeholder="Criteria"
       component={TextField}
     />
   </>

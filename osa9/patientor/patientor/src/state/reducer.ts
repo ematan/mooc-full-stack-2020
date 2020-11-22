@@ -15,11 +15,11 @@ export type Action =
       payload: Patient;
     }
   | {
-      type: 'SET_DIAGNOSES';
+      type: "SET_DIAGNOSES";
       payload: Diagnosis[];
     }
   | {
-      type: 'ADD_ENTRY';
+      type: "ADD_ENTRY";
       payload: Entry;
       id: string;
   };
@@ -45,7 +45,7 @@ export const reducer = (state: State, action: Action): State => {
           [action.payload.id]: action.payload
         }
       };
-    case 'FETCHED_PATIENT':
+    case "FETCHED_PATIENT":
       return {
         ...state,
         patientDetails: {
@@ -53,7 +53,7 @@ export const reducer = (state: State, action: Action): State => {
           [action.payload.id]: action.payload
         }
       };
-    case 'SET_DIAGNOSES':
+    case "SET_DIAGNOSES":
       return {
         ...state,
         diagnoses: {
@@ -64,7 +64,7 @@ export const reducer = (state: State, action: Action): State => {
           ...state.diagnoses
         }
       };
-    case 'ADD_ENTRY': {
+    case "ADD_ENTRY": {
       const patient = state.patientDetails[action.id];
       console.log(patient);
       const updatedPatient = { ...patient, entries: [...patient.entries, action.payload] };
@@ -80,35 +80,35 @@ export const reducer = (state: State, action: Action): State => {
 
 export const setPatientList = (patientListFromApi: Patient[]): Action => {
   return {
-    type: 'SET_PATIENT_LIST',
+    type: "SET_PATIENT_LIST",
     payload: patientListFromApi
   };
 };
 
 export const addPatient = (patient: Patient): Action => {
   return {
-    type: 'ADD_PATIENT',
+    type: "ADD_PATIENT",
     payload: patient
   };
 };
 
 export const setFetchedPatient = (patient: Patient): Action => {
   return {
-    type: 'FETCHED_PATIENT',
+    type: "FETCHED_PATIENT",
     payload: patient
   };
 };
 
 export const setDiagnoses = (diagnosisCodes: Diagnosis[]): Action => {
   return {
-    type: 'SET_DIAGNOSES',
+    type: "SET_DIAGNOSES",
     payload: diagnosisCodes
   };
 };
 
 export const addEntry = (entry: Entry, id: string): Action => {
   return {
-    type: 'ADD_ENTRY',
+    type: "ADD_ENTRY",
     payload: entry, id
   };
 };

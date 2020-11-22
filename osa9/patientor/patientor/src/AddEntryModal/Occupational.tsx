@@ -1,37 +1,37 @@
-import React from 'react';
+import React from "react";
 import { TextField } from "../AddPatientModal/FormField";
 import { Field } from "formik";
-import { newOccupationalHealthcareEntry } from '../types';
-import { Header } from 'semantic-ui-react';
+import { newOccupationalHealthcareEntry } from "../types";
+import { Header } from "semantic-ui-react";
 
 export const initialValuesOccupational = {
-  employerName: '',
-  type: 'OccupationalHealthcare',
+  employerName: "",
+  type: "OccupationalHealthcare",
   sickLeave: {
-    startDate: '',
-    endDate: '',
+    startDate: "",
+    endDate: "",
   }
 };
 
 export const OccupationalFields = (
   <>
     <Field
-      label='Employer Name'
-      name='employerName'
-      placeholder='Employer Name'
+      label="Employer Name"
+      name="employerName"
+      placeholder="Employer Name"
       component={TextField}
     />
     <Header>SickLeave</Header>
     <Field
-      label='Start Date'
-      name='sickLeave.startDate'
-      placeholder='YYYY-MM-DD'
+      label="Start Date"
+      name="sickLeave.startDate"
+      placeholder="YYYY-MM-DD"
       component={TextField}
     />
     <Field
-      label='End Date'
-      name='sickLeave.endDate'
-      placeholder='YYYY-MM-DD'
+      label="End Date"
+      name="sickLeave.endDate"
+      placeholder="YYYY-MM-DD"
       component={TextField}
     />
   </>
@@ -64,7 +64,7 @@ export const validateOccupational = (values: newOccupationalHealthcareEntry) => 
       }
     }
     if (Object.keys(sickLeave).length!==0) {
-      return {...errors, sickLeave }
+      return {...errors, sickLeave };
     }
 
     return errors;
